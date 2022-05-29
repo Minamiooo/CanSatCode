@@ -16,18 +16,29 @@ class MainWindow(QMainWindow):
     def __init__(self):
         super(MainWindow, self).__init__()
 
+        buttonWidth = 100
+        windowWidth = 800
+        windowHeight = 600
+
         self.setWindowTitle("Ground Station")
         self.setWindowIcon(QIcon("strudel.png"))
+
+        screen = app.primaryScreen()
+        size = screen.size()
+        if size.width() == 3840 and size.height() == 2160:
+            buttonWidth = buttonWidth * 4
+            windowWidth = windowWidth * 2
+            windowHeight = windowHeight * 2
 
         mainLayout = QVBoxLayout()
         buttonLayout = QHBoxLayout()
         chartLayout = QGridLayout()
 
-        button1 = QPushButton("Start"); button1.setMaximumWidth(100); button1.setCheckable(True)
+        button1 = QPushButton("Start"); button1.setMaximumWidth(buttonWidth); button1.setCheckable(True)
         button1.clicked.connect(self.button1Clicked)
-        button2 = QPushButton("Stop"); button2.setMaximumWidth(100); button2.setCheckable(True)
-        button3 = QPushButton("Calibrate"); button3.setMaximumWidth(100); button3.setCheckable(True)
-        button4 = QPushButton("Sim Mode"); button4.setMaximumWidth(100); button4.setCheckable(True)
+        button2 = QPushButton("Stop"); button2.setMaximumWidth(buttonWidth); button2.setCheckable(True)
+        button3 = QPushButton("Sim Mode Activate"); button3.setMaximumWidth(buttonWidth); button3.setCheckable(True)
+        button4 = QPushButton("Sim Mode Start"); button4.setMaximumWidth(buttonWidth); button4.setCheckable(True)
         csvTable = Color('white'); csvTable.setMaximumHeight(150)
 
         buttonLayout.addWidget(button1)
@@ -48,7 +59,8 @@ class MainWindow(QMainWindow):
         widget = QWidget()
         widget.setLayout(mainLayout) # Set main widget to vertical layout
         self.setCentralWidget(widget)
-        self.setMinimumSize(QSize(800,600))
+        self.setMinimumSize(QSize(windowWidth,windowHeight))
+        self.showMaximized()
 
     def button1Clicked(self):
         # Q: will GUI freeze up with this while loop?
