@@ -20,18 +20,18 @@ if __name__ == "__main__":
     app = QApplication(sys.argv)
     
     # Practice Numbers
-    MissionTime = [1, 25, 50, 100, 150]
-    ContainerVoltage = [4, 5, 4.5, 5, 5.5]
-    ContainerTemperature = [16, 18, 22, 27, 25]
-    ContainerAltitude = [50, 200, 600, 750, 650]
-    ContainerGPSLatitude = [37.1982193732975, 37.1982074022768, 37.1981551938267, 37.1980681085355, 37.198000850163]
-    ContainerGPSLongitude = [-80.5827774266241, -80.5827720557983, -80.5827727159543, -80.5827801973479, -80.5827941707729]
-    PayloadVoltage = [2, 3, 3.5, 3, 4]
-    PayloadTemperature = [17, 20, 25, 30, 28]
-    PayloadAltitude = [48, 180, 500, 700, 600]
+    #MissionTime = [1, 25, 50, 100, 150]
+    #ContainerVoltage = [4, 5, 4.5, 5, 5.5]
+    #ContainerTemperature = [16, 18, 22, 27, 25]
+    #ContainerAltitude = [50, 200, 600, 750, 650]
+    #ContainerGPSLatitude = [37.1982193732975, 37.1982074022768, 37.1981551938267, 37.1980681085355, 37.198000850163]
+    #ContainerGPSLongitude = [-80.5827774266241, -80.5827720557983, -80.5827727159543, -80.5827801973479, -80.5827941707729]
+    #PayloadVoltage = [2, 3, 3.5, 3, 4]
+    #PayloadTemperature = [17, 20, 25, 30, 28]
+    #PayloadAltitude = [48, 180, 500, 700, 600]
     
     # insert csv data
-    data = pd.read_csv('file name') # ADD FILE NAME HERE FOR CSV DATA
+    data = pd.read_csv('test.csv') # ADD FILE NAME HERE FOR CSV DATA
     MissionTime = data['MISSION_TIME'] #160 seconds max 
     ContainerVoltage = data['VOLTAGE'] #9V max 
     ContainerTemperature = data['TEMP'] #15 Celsius to 35 Celsius 
