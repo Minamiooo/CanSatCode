@@ -1,8 +1,7 @@
 import sys
-from PyQt5.QtWidgets import (QApplication, QMainWindow, QWidget, QVBoxLayout, 
-                             QHBoxLayout, QGridLayout, QPushButton, QTableWidget)
-from PyQt5.QtCore import QSize
-from PyQt5.QtGui import QPalette, QColor, QIcon
+from PySide6.QtWidgets import (QApplication, QMainWindow, QWidget, QVBoxLayout, QTableWidget)
+from PySide6.QtCore import QSize
+from PySide6.QtGui import QIcon
 import buttons, plots_v2
 
 class MainWindow(QMainWindow):
@@ -13,7 +12,7 @@ class MainWindow(QMainWindow):
         self.setWindowIcon(QIcon("strudel.png"))
 
         #Initialize Variables
-        buttonWidth = 100
+        buttonWidth = 150
         windowWidth = 800
         windowHeight = 600
         tableHeight = 150
@@ -29,7 +28,7 @@ class MainWindow(QMainWindow):
         mainLayout = QVBoxLayout()
 
         #Add Widgets to mainLayout
-        buttonBar = buttons.ButtonBar()
+        buttonBar = buttons.ButtonBar(buttonWidth)
         mainLayout.addWidget(buttonBar)
 
         Plots = plots_v2.Plots()
