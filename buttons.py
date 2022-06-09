@@ -1,5 +1,4 @@
 from PySide6.QtWidgets import (QWidget, QHBoxLayout, QPushButton, QSizePolicy, QSpacerItem)
-from PySide6.QtCore import QSize
 
 class ButtonBar(QWidget):
     def __init__(self, width):

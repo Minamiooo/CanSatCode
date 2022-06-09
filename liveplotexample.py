@@ -29,19 +29,13 @@ class MainWindow(QMainWindow):
         self.graphWidget.setLabel('bottom', 
             '<span style=\"color:red;font-size:20px\">x axis</span>')
 
-        self.timer = QtCore.QTimer()
-        self.timer.setInterval(100)
-        self.timer.timeout.connect(self.update_plot_data)
-        self.timer.start()
+        
+        self.update_plot_data()
+        
 
     def update_plot_data(self):
         
-        self.x = self.x[1:]
-        self.x.append(self.x[-1] + 1)
-
-        self.y = self.y[1:]
-        self.y.append( randint(0,100))
-
+        
         self.lineRef.setData(self.x, self.y)
 
 

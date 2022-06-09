@@ -11,14 +11,13 @@ def timeConvert(arr):
     return arr.astype(float)
 
 container = {
-            "MissionTime": timeConvert(containerData['MISSION_TIME']), #160 seconds max 
-            "Voltage": containerData['VOLTAGE'], #9V max
-            "Temperature": containerData['TEMP'], #15 Celsius to 35 Celsius 
-            "Altitude": containerData['ALTITUDE'], #0 to 750m 
-            "Latitude": containerData['GPS_LATITUDE'],
-            "Longitude": containerData['GPS_LONGITUDE']
+            "MissionTime": timeConvert(containerData['MISSION_TIME']).tolist(), #160 seconds max 
+            "Voltage": containerData['VOLTAGE'].tolist(), #9V max
+            "Temperature": containerData['TEMP'].tolist(), #15 Celsius to 35 Celsius 
+            "Altitude": containerData['ALTITUDE'].tolist(), #0 to 750m 
+            "Latitude": containerData['GPS_LATITUDE'].tolist(),
+            "Longitude": containerData['GPS_LONGITUDE'].tolist()
         }
-
 
 
 
@@ -26,7 +25,7 @@ container = {
 #     t = sum(x * int(t) for x, t in zip([3600, 60, 1], timeArr[i].split(":")))
 #     timeArr[i] = timeArr[i].apply(int)
 
-print(container["MissionTime"])
+print(container["MissionTime"][-1])
 
 
 # def timeConvert(timeArr):

@@ -1,9 +1,7 @@
-from PySide6.QtWidgets import (QApplication, QMainWindow, QWidget, QVBoxLayout, 
-                             QHBoxLayout, QGridLayout, QPushButton, QTableWidget)
-from PySide6.QtCore import QSize
+from PySide6.QtWidgets import QWidget, QGridLayout
+from PySide6.QtCore import QFileSystemWatcher
 
 import sys
-import numpy as np
 import pandas as pd
 import pyqtgraph as pg
 
@@ -14,29 +12,13 @@ class Plots(QWidget):
 
         self.initialPlot()
 
+
+
     def initialPlot(self):
         self.layout = QGridLayout()
         self.setLayout(self.layout)
 
-        containerData = pd.read_csv("Flight_1076_C.csv")
-        payloadData = pd.read_csv("Flight_1076_P.csv")
-
-        #Container
-        self.container = {
-            "MissionTime": self.timeConvert(containerData['MISSION_TIME']), #160 seconds max 
-            "Voltage": containerData['VOLTAGE'], #9V max
-            "Temperature": containerData['TEMP'], #15 Celsius to 35 Celsius 
-            "Altitude": containerData['ALTITUDE'], #0 to 750m 
-            "Latitude": containerData['GPS_LATITUDE'],
-            "Longitude": containerData['GPS_LONGITUDE']
-        }
-        #Payload
-        self.payload = {
-            "MissionTime": self.timeConvert(payloadData['MISSION_TIME']),
-            "Voltage": payloadData['TP_VOLTAGE'], #9V max
-            "Temperature": payloadData['TP_TEMP'],
-            "Altitude": payloadData['TP_ALTITUDE'], #0 to 750m 
-        }
+        self.readData()
 
         #Instantiate PlotWidget objects
         self.voltagePlotWidget = pg.PlotWidget()
@@ -119,6 +101,31 @@ class Plots(QWidget):
         timeArr = (3600*timeArr.dt.hour + 60*timeArr.dt.minute + timeArr.dt.second) #Assumes time starts at 0
         return timeArr.astype(float)
 
+    def readData(self): #reads data and assigns to varaibles
+        containerData = pd.read_csv("Flight_1076_C.csv")
+        payloadData = pd.read_csv("Flight_1076_P.csv")
+
+        #Container
+        self.container = {
+            "MissionTime": self.timeConvert(containerData['MISSION_TIME']).tolist(), #160 seconds max 
+            "Voltage": containerData['VOLTAGE'].tolist(), #9V max
+            "Temperature": containerData['TEMP'].tolist(), #15 Celsius to 35 Celsius 
+            "Altitude": containerData['ALTITUDE'].tolist(), #0 to 750m 
+            "Latitude": containerData['GPS_LATITUDE'].tolist(),
+            "Longitude": containerData['GPS_LONGITUDE'].tolist()
+        }
+        #Payload
+        self.payload = {
+            "MissionTime": self.timeConvert(payloadData['MISSION_TIME']).tolist(),
+            "Voltage": payloadData['TP_VOLTAGE'].tolist(), #9V max
+            "Temperature": payloadData['TP_TEMP'].tolist(),
+            "Altitude": payloadData['TP_ALTITUDE'].tolist(), #0 to 750m 
+        }
+
     def updatePlot(self): #QFileSystemWatcher sig & slot
-        pass
+        self.readData()
+        
+        #self.voltagePlotWidget.clear()
+        self.voltagePlotWidget.setData(self.container["MissionTime"][-1], self.container["Voltage"][-1])
+        self.voltagePlotWidget.setData(self.payload["MissionTime"][-1], self.payload["Voltage"][-1])
 

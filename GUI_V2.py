@@ -1,6 +1,6 @@
 import sys
 from PySide6.QtWidgets import (QApplication, QMainWindow, QWidget, QVBoxLayout, QTableWidget)
-from PySide6.QtCore import QSize
+from PySide6.QtCore import QSize, QFileSystemWatcher
 from PySide6.QtGui import QIcon
 import buttons, plots_v2
 
@@ -33,6 +33,10 @@ class MainWindow(QMainWindow):
 
         Plots = plots_v2.Plots()
         mainLayout.addWidget(Plots)
+
+        self.watcher = QFileSystemWatcher()
+        self.watcher.addPath("Flight_1076_C.csv")
+        self.watcher.fileChanged.connect(print("change in file"))#self.updatePlot()
 
         #Finalize
         widget = QWidget()

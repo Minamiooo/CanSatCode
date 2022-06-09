@@ -80,13 +80,13 @@ class MainWindow(QMainWindow):
         PayloadTemperature = []
         PayloadAltitude = []
 
-        data = pd.read_csv('test.csv') # ADD FILE NAME HERE FOR CSV DATA
-        MissionTime = data['MISSION_TIME'] #160 seconds max 
-        ContainerVoltage = data['VOLTAGE'] #9V max 
-        ContainerTemperature = data['TEMP'] #15 Celsius to 35 Celsius 
-        ContainerAltitude = data['ALTITUDE'] #0 to 750m 
-        ContainerGPSLatitude = data['GPS_LATITUDE'] 
-        ContainerGPSLongitude = data['GPS_LONGITUDE'] 
+        data = pd.read_csv('containertest.csv') # ADD FILE NAME HERE FOR CSV DATA
+        MissionTime = data['MISSION_TIME'].tolist() #160 seconds max 
+        ContainerVoltage = data['VOLTAGE'].tolist() #9V max 
+        ContainerTemperature = data['TEMP'].tolist() #15 Celsius to 35 Celsius 
+        ContainerAltitude = data['ALTITUDE'].tolist() #0 to 750m 
+        ContainerGPSLatitude = data['GPS_LATITUDE'].tolist() 
+        ContainerGPSLongitude = data['GPS_LONGITUDE'].tolist() 
         
         # Setting up Plot/Layouts
         pg_layout = pg.GraphicsLayoutWidget()
