@@ -1,7 +1,5 @@
-from PySide6.QtWidgets import QWidget, QGridLayout
-from PySide6.QtCore import QFileSystemWatcher
+from PySide2.QtWidgets import QWidget, QGridLayout
 
-import sys
 import pandas as pd
 import pyqtgraph as pg
 
@@ -11,8 +9,8 @@ class Plots(QWidget):
         super().__init__()
 
         self.initialPlot()
-
-
+        # self.state = True
+        # self.thread()
 
     def initialPlot(self):
         self.layout = QGridLayout()
@@ -26,8 +24,8 @@ class Plots(QWidget):
         self.altPlotWidget = pg.PlotWidget()
         self.GPSPlotWidget = pg.PlotWidget()
 
-        redpen = pg.mkPen(color=(255, 0, 0), width=2)
-        bluepen = pg.mkPen(color=(0, 0, 255), width=2)
+        self.redpen = pg.mkPen(color=(255, 0, 0), width=2)
+        self.bluepen = pg.mkPen(color=(0, 0, 255), width=2)
 
         #Voltage Plot
         self.voltagePlotWidget.setBackground('w')
@@ -37,9 +35,9 @@ class Plots(QWidget):
         self.voltagePlotWidget.addLegend()
 
         self.voltagePlotWidget.plot(
-            self.container["MissionTime"], self.container["Voltage"], name="Container Voltage", pen=redpen, symbol='o')
+            self.container["MissionTime"], self.container["Voltage"], name="Container Voltage", pen=self.redpen, symbol='o')
         self.voltagePlotWidget.plot(
-            self.payload["MissionTime"], self.payload["Voltage"], name="Payload Voltage", pen=bluepen, symbol='o')
+            self.payload["MissionTime"], self.payload["Voltage"], name="Payload Voltage", pen=self.bluepen, symbol='o')
         self.voltagePlotWidget.setLabel('left', 
             '<span style=\"color:black;font-size:10px\">Voltage [Volts]</span>')
         self.voltagePlotWidget.setLabel('bottom', 
@@ -53,9 +51,9 @@ class Plots(QWidget):
         self.tempPlotWidget.addLegend()
 
         self.tempPlotWidget.plot(
-            self.container["MissionTime"], self.container["Temperature"], name="Container Temperature", pen=redpen, symbol='o')
+            self.container["MissionTime"], self.container["Temperature"], name="Container Temperature", pen=self.redpen, symbol='o')
         self.tempPlotWidget.plot(
-            self.payload["MissionTime"], self.payload["Temperature"], name="Payload Temperature", pen=bluepen, symbol='o')
+            self.payload["MissionTime"], self.payload["Temperature"], name="Payload Temperature", pen=self.bluepen, symbol='o')
         self.tempPlotWidget.setLabel('left', 
             '<span style=\"color:black;font-size:10px\">Temperature [degree C]</span>')
         self.tempPlotWidget.setLabel('bottom', 
@@ -69,9 +67,9 @@ class Plots(QWidget):
         self.altPlotWidget.addLegend()
 
         self.altPlotWidget.plot(
-            self.container["MissionTime"], self.container["Altitude"], name="Container Altitude", pen=redpen, symbol='o')
+            self.container["MissionTime"], self.container["Altitude"], name="Container Altitude", pen=self.redpen, symbol='o')
         self.altPlotWidget.plot(
-            self.payload["MissionTime"], self.payload["Altitude"], name="Payload Altitude", pen=bluepen, symbol='o')
+            self.payload["MissionTime"], self.payload["Altitude"], name="Payload Altitude", pen=self.bluepen, symbol='o')
         self.altPlotWidget.setLabel('left', 
             '<span style=\"color:black;font-size:10px\">Altitude [m]</span>')
         self.altPlotWidget.setLabel('bottom', 
@@ -84,7 +82,7 @@ class Plots(QWidget):
             "Latitude vs. Longitude", color="k", size="10pt")
 
         self.GPSPlotWidget.plot(
-            self.container["Longitude"], self.container["Latitude"], name="GPS", pen=redpen, symbol='+')
+            self.container["Longitude"], self.container["Latitude"], name="GPS", pen=self.redpen, symbol='+')
         self.GPSPlotWidget.setLabel('left', 
             '<span style=\"color:black;font-size:10px\">Latitude [deg]</span>')
         self.GPSPlotWidget.setLabel('bottom', 
@@ -123,9 +121,20 @@ class Plots(QWidget):
         }
 
     def updatePlot(self): #QFileSystemWatcher sig & slot
-        self.readData()
-        
-        #self.voltagePlotWidget.clear()
-        self.voltagePlotWidget.setData(self.container["MissionTime"][-1], self.container["Voltage"][-1])
-        self.voltagePlotWidget.setData(self.payload["MissionTime"][-1], self.payload["Voltage"][-1])
+        #while self.state is True:
+            self.readData()
+            print(self.container["MissionTime"][-1])
+            self.voltagePlotWidget.plot(
+            self.container["MissionTime"], self.container["Voltage"], pen=self.redpen, symbol='o')
+            self.voltagePlotWidget.plot(
+            self.payload["MissionTime"], self.payload["Voltage"], pen=self.bluepen, symbol='o')
+            #self.voltagePlotWidget.clear()
+            #self.voltagePlotWidget.setData(self.container["MissionTime"][-1], self.container["Voltage"][-1])
+            #self.voltagePlotWidget.setData(self.payload["MissionTime"][-1], self.payload["Voltage"][-1])
+            #time.sleep(0.5)
+
+    # def thread(self):
+    #     self.t1 = Thread(target=self.updatePlot)
+    #     self.t1.start()
+
 
