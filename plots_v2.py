@@ -1,11 +1,12 @@
-from PySide2.QtWidgets import QWidget, QGridLayout
+from PySide2.QtWidgets import QWidget, QGridLayout, QSpacerItem, QSizePolicy, QLabel
+
 
 import pandas as pd
 import pyqtgraph as pg
 
 class Plots(QWidget):
     def __init__(self):
-    
+
         super().__init__()
 
         self.initialPlot()
@@ -23,6 +24,7 @@ class Plots(QWidget):
         self.tempPlotWidget = pg.PlotWidget()
         self.altPlotWidget = pg.PlotWidget()
         self.GPSPlotWidget = pg.PlotWidget()
+        #self.spacer = QLabel("Label")
 
         self.redpen = pg.mkPen(color=(255, 0, 0), width=2)
         self.bluepen = pg.mkPen(color=(0, 0, 255), width=2)
@@ -33,7 +35,7 @@ class Plots(QWidget):
         self.voltagePlotWidget.setTitle(
             "Voltage vs. Mission Time", color="k", size="10pt")
         self.voltagePlotWidget.addLegend()
-
+        
         self.voltagePlotWidget.plot(
             self.container["MissionTime"], self.container["Voltage"], name="Container Voltage", pen=self.redpen, symbol='o')
         self.voltagePlotWidget.plot(
@@ -88,20 +90,23 @@ class Plots(QWidget):
         self.GPSPlotWidget.setLabel('bottom', 
             '<span style=\"color:black;font-size:10px\">Longitude [deg]</span>')
                 
+       # self.spacer.setWidth(200)
         #Add Plots to GridLayout
         self.layout.addWidget(self.voltagePlotWidget,1,1)
-        self.layout.addWidget(self.tempPlotWidget,1,2)
-        self.layout.addWidget(self.altPlotWidget,2,1,1,2)
-        self.layout.addWidget(self.GPSPlotWidget,1,3,2,2)
-
+        self.layout.addWidget(self.tempPlotWidget,2,1)
+        self.layout.addWidget(self.altPlotWidget,3,1)
+        self.layout.addWidget(self.GPSPlotWidget,1,2,3,2)
+        
     def timeConvert(self, timeArr): #converts array of time codes HH:MM:SS to seconds
         timeArr = pd.to_datetime(timeArr, format='%H:%M:%S')
         timeArr = (3600*timeArr.dt.hour + 60*timeArr.dt.minute + timeArr.dt.second) #Assumes time starts at 0
         return timeArr.astype(float)
 
     def readData(self): #reads data and assigns to varaibles
-        containerData = pd.read_csv("Flight_1076_C.csv")
-        payloadData = pd.read_csv("Flight_1076_P.csv")
+        #containerData = pd.read_csv("Flight_1076_C.csv")
+        #payloadData = pd.read_csv("Flight_1076_P.csv")
+        containerData = pd.read_csv("zerosC.csv")
+        payloadData = pd.read_csv("zerosP.csv")
 
         #Container
         self.container = {
@@ -120,21 +125,30 @@ class Plots(QWidget):
             "Altitude": payloadData['TP_ALTITUDE'].tolist(), #0 to 750m 
         }
 
-    def updatePlot(self): #QFileSystemWatcher sig & slot
-        #while self.state is True:
-            self.readData()
-            print(self.container["MissionTime"][-1])
-            self.voltagePlotWidget.plot(
-            self.container["MissionTime"], self.container["Voltage"], pen=self.redpen, symbol='o')
-            self.voltagePlotWidget.plot(
-            self.payload["MissionTime"], self.payload["Voltage"], pen=self.bluepen, symbol='o')
-            #self.voltagePlotWidget.clear()
-            #self.voltagePlotWidget.setData(self.container["MissionTime"][-1], self.container["Voltage"][-1])
-            #self.voltagePlotWidget.setData(self.payload["MissionTime"][-1], self.payload["Voltage"][-1])
-            #time.sleep(0.5)
+    def updatePlot(self): 
+        
+        self.readData()
+        #print(self.container["MissionTime"][-1])
+        self.voltagePlotWidget.plot(
+        self.container["MissionTime"], self.container["Voltage"], pen=self.redpen, symbol='o')
+        self.voltagePlotWidget.plot(
+        self.payload["MissionTime"], self.payload["Voltage"], pen=self.bluepen, symbol='o')
 
-    # def thread(self):
-    #     self.t1 = Thread(target=self.updatePlot)
-    #     self.t1.start()
+        self.tempPlotWidget.plot(
+            self.container["MissionTime"], self.container["Temperature"], pen=self.redpen, symbol='o')
+        self.tempPlotWidget.plot(
+            self.payload["MissionTime"], self.payload["Temperature"], pen=self.bluepen, symbol='o')
+
+        self.altPlotWidget.plot(
+            self.container["MissionTime"], self.container["Altitude"], pen=self.redpen, symbol='o')
+        self.altPlotWidget.plot(
+            self.payload["MissionTime"], self.payload["Altitude"], pen=self.bluepen, symbol='o')
+
+        self.GPSPlotWidget.plot(
+            self.container["Longitude"], self.container["Latitude"], pen=self.redpen, symbol='+')
+
+
+        
+
 
 

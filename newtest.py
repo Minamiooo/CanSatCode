@@ -1,32 +1,59 @@
-import os
+from PySide2.QtWidgets import QVBoxLayout, QLabel, QPushButton, QWidget, QMainWindow, QApplication
+from PySide2.QtCore import QTimer, QThreadPool, QRunnable, Slot
+
+import sys
 import time
-from threading import Thread
 
-fileName = "C:/Users/mattm/OneDrive/Documents/Code/CanSatCode/Flight_1076_C.csv"
+global running
+running = True
 
-def func1():
-    while True:
-        print(os.path.getsize(fileName))
-        time.sleep(1)
+class Worker(QRunnable):
+    @Slot()
+    def run(self): #Code to be executed
+        while running:
+            print("test")
+            time.sleep(5)
 
-def func2():
-    while True:
-        print("function 2")
-        time.sleep(0.5)
+class MainWindow(QMainWindow):
 
-def runA():
-    while True:
-        print('A\n')
-        time.sleep(1)
+    def __init__(self):
+        super(MainWindow, self).__init__()
 
-def runB():
-    while True:
-        print('B\n')
-        time.sleep(0.5)
+        self.counter = 0
 
-if __name__ == "__main__":
-    t1 = Thread(target = func1)
-    t1.setDaemon(True)
-    t1.start()
-    while True:
-        pass
+        layout = QVBoxLayout()
+
+        self.l = QLabel("Start")
+        b = QPushButton("DANGER!")
+        b.pressed.connect(self.oh_no)
+
+        layout.addWidget(self.l)
+        layout.addWidget(b)
+
+        self.threadpool = QThreadPool()
+        print("Multithreading with maximum %d threads" % self.threadpool.maxThreadCount())
+
+        w = QWidget()
+        w.setLayout(layout)
+
+        self.setCentralWidget(w)
+
+        self.show()
+
+        self.timer = QTimer()
+        self.timer.setInterval(1000)
+        self.timer.timeout.connect(self.recurring_timer)
+        self.timer.start()
+
+    def oh_no(self):
+        worker = Worker()
+        self.threadpool.start(worker)
+
+    def recurring_timer(self):
+        self.counter +=1
+        self.l.setText("Counter: %d" % self.counter)
+
+app = QApplication(sys.argv)
+window = MainWindow()
+app.exec_()
+running = False
