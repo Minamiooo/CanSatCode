@@ -6,9 +6,12 @@ from matplotlib.pyplot import plot
 import buttons, plots_v2, os, time
 from threading import Thread
 from plots_v2 import Plots
+import csv_gen as c
 
 global running
 running = True
+
+c.build_csv()
 
 class PlotWorker(QRunnable):
     @Slot()
@@ -16,7 +19,7 @@ class PlotWorker(QRunnable):
         while running:
             plots.updatePlot() #!!!!!!!!!!
             print("plot updated")
-            time.sleep(1)
+            time.sleep(.3)
 
 class MainWindow(QMainWindow):
     def __init__(self):
@@ -50,7 +53,7 @@ class MainWindow(QMainWindow):
         plots = plots_v2.Plots()
         mainLayout.addWidget(plots)
 
-        self.paths = "C:/Users/mattm/OneDrive/Documents/Code/CanSatCode/Flight_1076_C.csv"
+        # self.paths = "C:/Users/mattm/OneDrive/Documents/Code/CanSatCode/Flight_1076_C.csv"
 
         self.threadpool = QThreadPool() #Instantiate updateplot thread object
         self.startThread()

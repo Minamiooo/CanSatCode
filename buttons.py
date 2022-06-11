@@ -1,7 +1,7 @@
 from PySide2.QtWidgets import (QWidget, QHBoxLayout, QPushButton, QSizePolicy, QSpacerItem)
 from PySide2.QtCore import QRunnable, Slot, QThreadPool
 from GUI_V2 import running
-import time
+import time, Radio_Configuration as xbee, csv_gen as c
 
 class ButtonBar(QWidget):
     def __init__(self, width):
@@ -77,16 +77,14 @@ class Button1Worker(QRunnable):
 class Button2Worker(QRunnable):
     @Slot()
     def run(self): #Code to be executed
-        while running:
-            print("button2")
-            time.sleep(1)
+        c.build_csv()
+        xbee.Initialize
 
 class Button3Worker(QRunnable):
     @Slot()
     def run(self): #Code to be executed
         while running:
-            print("button3")
-            time.sleep(1)
+            xbee.Read_data()
 
 class Button4Worker(QRunnable):
     @Slot()

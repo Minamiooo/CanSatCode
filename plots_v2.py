@@ -60,7 +60,7 @@ class Plots(QWidget):
             '<span style=\"color:black;font-size:10px\">Temperature [degree C]</span>')
         self.tempPlotWidget.setLabel('bottom', 
             '<span style=\"color:black;font-size:10px\">Mission Time [Seconds]</span>') 
-       
+        
         #Altitude Plot
         self.altPlotWidget.setTitle(
             "Altitude vs. Mission Time", color="k", size="10pt")
@@ -90,7 +90,7 @@ class Plots(QWidget):
         self.GPSPlotWidget.setLabel('bottom', 
             '<span style=\"color:black;font-size:10px\">Longitude [deg]</span>')
                 
-       # self.spacer.setWidth(200)
+        # self.spacer.setWidth(200)
         #Add Plots to GridLayout
         self.layout.addWidget(self.voltagePlotWidget,1,1)
         self.layout.addWidget(self.tempPlotWidget,2,1)
@@ -103,14 +103,13 @@ class Plots(QWidget):
         return timeArr.astype(float)
 
     def readData(self): #reads data and assigns to varaibles
-        #containerData = pd.read_csv("Flight_1076_C.csv")
-        #payloadData = pd.read_csv("Flight_1076_P.csv")
-        containerData = pd.read_csv("zerosC.csv")
-        payloadData = pd.read_csv("zerosP.csv")
+        containerData = pd.read_csv("Flight_1076_C.csv")
+        payloadData = pd.read_csv("Flight_1076_P.csv")
 
         #Container
         self.container = {
-            "MissionTime": self.timeConvert(containerData['MISSION_TIME']).tolist(), #160 seconds max 
+            #"MissionTime": self.timeConvert(containerData['MISSION_TIME']).tolist(), #160 seconds max 
+            "MissionTime": containerData['PACKET_COUNT'].tolist(), #160 seconds max 
             "Voltage": containerData['VOLTAGE'].tolist(), #9V max
             "Temperature": containerData['TEMP'].tolist(), #15 Celsius to 35 Celsius 
             "Altitude": containerData['ALTITUDE'].tolist(), #0 to 750m 
@@ -119,7 +118,8 @@ class Plots(QWidget):
         }
         #Payload
         self.payload = {
-            "MissionTime": self.timeConvert(payloadData['MISSION_TIME']).tolist(),
+            #"MissionTime": self.timeConvert(payloadData['MISSION_TIME']).tolist(),
+            "MissionTime": payloadData['PACKET_COUNT'].tolist(), #160 seconds max 
             "Voltage": payloadData['TP_VOLTAGE'].tolist(), #9V max
             "Temperature": payloadData['TP_TEMP'].tolist(),
             "Altitude": payloadData['TP_ALTITUDE'].tolist(), #0 to 750m 
