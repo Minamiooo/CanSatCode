@@ -42,8 +42,8 @@ def Read_data():
     else:
         pass
 
-while True:
-    Read_data()
+#while True:
+    #Read_data()
 
 def End_comms():
     gcs_xbeeserial.close()
